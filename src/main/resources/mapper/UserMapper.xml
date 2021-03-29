@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="me.moon.boilerplate.mapper.UserMapper">
+
+    <select id="toExistEmail" resultType="boolean">
+        SELECT EXISTS
+        (SELECT email FROM USER WHERE email = #{email})
+    </select>
+
+    <insert id="insertUser" parameterType="me.moon.boilerplate.dto.user.UserSaveRequestDto">
+        INSERT INTO USER(password, email, name, phone, picture, role, created_date, modified_date)
+        VALUES(#{password}, #{email}, #{name}, #{phone}, #{picture}, #{role}, NOW(), NOW())
+    </insert>
+
+    <select id="selectUserById" resultType="me.moon.boilerplate.dto.user.UserResponseDto">
+        SELECT id, email, name, phone, picture, modified_date, role
+        FROM USER WHERE id = #{id}
+    </select>
+
+    <select id="selectUserByEmail" resultType="me.moon.boilerplate.dto.user.LoginUserDto">
+        SELECT id, email, password, name, phone, picture, modified_date, role
+        FROM USER WHERE email = #{email}
+    </select>
+
+    <update id="updateUser" parameterType="me.moon.boilerplate.dto.user.UserUpdateRequestDto">
+        UPDATE USER SET name = #{name}, phone = #{phone}, picture = #{picture}, modified_date =
+        NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="changePassword" parameterType="String">
+        UPDATE USER SET password = #{newPassword}, modified_date = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="Long">
+        DELETE FROM USER WHERE id = #{id}
+    </delete>
+
+</mapper>
